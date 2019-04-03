@@ -12,7 +12,8 @@
     "react-scripts": "2.1.8",
     "redux": "^4.0.1",
     "redux-actions": "^2.6.5",
-    "styled-components": "^4.2.0"
+    "styled-components": "^4.2.0",
+    "ts-pnp": "^1.0.1"
   },
   "scripts": {
     "start": "NODE_PATH=src react-scripts start",
@@ -28,5 +29,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "react-hot-loader": "^4.5.3"
+  }
 }
