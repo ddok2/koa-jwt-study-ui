@@ -21,6 +21,11 @@ class Register extends Component {
             </AuthContent>
         );
     }
+
+    componentWillUnmount() {
+        const { AuthActions } = this.props;
+        AuthActions.initializeForm('register');
+    }
 }
 
 export default Register;
