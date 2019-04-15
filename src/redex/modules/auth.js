@@ -11,6 +11,7 @@ const CHECK_USERNAME_EXISTS = 'auth/CHECK_USERNAME_EXISTS';
 const LOCAL_REGISTER = 'auth/LOCAL_REGISTER';
 const LOCAL_LOGIN = 'auth/LOCAL_LOGIN';
 const LOGOUT = 'auth/LOGOUT';
+const SET_ERROR = 'auth/SET_ERROR';
 
 export const changeInput = createAction(CHANGE_INPUT);
 export const initializeForm = createAction(INITIALIZE_FORM);
@@ -25,6 +26,8 @@ export const localLogin = createAction(LOCAL_LOGIN, AuthAPI.localLogin);
 
 export const logout = createAction(LOGOUT, AuthAPI.logout);
 
+export const setError = createAction(SET_ERROR);
+
 const initialState = Map({
     register: Map({
         form: Map({
@@ -37,12 +40,14 @@ const initialState = Map({
             email: false,
             password: false,
         }),
+        error: null,
     }),
     login: Map({
         form: Map({
             email: '',
             password: '',
         }),
+        error: null,
     }),
     result: Map({}),
 });
@@ -76,4 +81,8 @@ export default handleActions({
         onSuccess: (state, action) => state.set('result',
             Map(action.payload.data)),
     }),
+    [SET_ERROR]: (state, action) => {
+        const { form, message } = action.payload;
+        return state.setIn([form, 'error'], message);
+    },
 }, initialState);
