@@ -46,6 +46,34 @@ class Register extends Component {
         });
     };
 
+    checkEmailExists = async (email) => {
+        const { AuthActions } = this.props;
+        try {
+            await AuthActions.checkEmailExists(email);
+            if (this.props.exists.get('email')) {
+                this.setError('이미 존재하는 이메일입니다.');
+            } else {
+                this.setError(null);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    checkUsernameExists = async (username) => {
+        const { AuthActions } = this.props;
+        try {
+            await AuthActions.checkUsernameExists(username);
+            if (this.props.exists.get('username')) {
+                this.setError('이미 존재하는 아이디입니다.');
+            } else {
+                this.setError(null);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
     validate = {
         email: (value) => {
             if (!isEmail(value)) {
@@ -92,6 +120,11 @@ class Register extends Component {
 
         const validation = this.validate[name](value);
         if (name.indexOf('password') > -1 || !validation) return;
+
+        const check = name === 'email' ?
+            this.checkEmailExists :
+            this.checkUsernameExists;
+        check(value);
 
     };
 }
