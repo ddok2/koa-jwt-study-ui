@@ -9,6 +9,7 @@ import {
 } from 'components/Auth';
 
 class Register extends Component {
+
     render() {
         const { error } = this.props;
         const { email, username, password, passwordConfirm } = this.props.form.toJS();
@@ -27,7 +28,7 @@ class Register extends Component {
                 {
                     error && <AuthError>{error}</AuthError>
                 }
-                <AuthButton>회원가입</AuthButton>
+                <AuthButton onClick={handleLocalRegister}>회원가입</AuthButton>
                 <RightAlignedLink to="/auth/login">로그인</RightAlignedLink>
             </AuthContent>
         );
@@ -37,6 +38,39 @@ class Register extends Component {
         const { AuthActions } = this.props;
         AuthActions.initializeForm('register');
     }
+
+    handleLocalRegister = async () => {
+        const { form, AuthActions, error, history } = this.props;
+        const { email, username, password, passwordConfirm } = form.toJS();
+
+        const { validate } = this;
+
+        if (error) return;
+        if (!validate['email'](email)
+            || !validate['username'](username)
+            || !validate['password'](password)
+            || !validate['passwordConfirm'](passwordConfirm)) {
+            return;
+        }
+
+        try {
+            await AuthActions.localRegister({
+                email, username, password,
+            });
+            const loggedInfo = this.props.result.toJS();
+            console.log(loggedInfo);
+            history.push('/');
+        } catch (e) {
+            if (e.response.status === 409) {
+                const { key } = e.response.data;
+                const message = key === 'email' ?
+                    '이미 존재하는 이메일입니다.' :
+                    '이미 존재하는 아이디입니다.';
+                return this.setError(message);
+            }
+            this.setError('알 수 없는 에러가 발생했습니다.');
+        }
+    };
 
     setError = (message) => {
         const { AuthActions } = this.props;
