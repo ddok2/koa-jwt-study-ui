@@ -13,7 +13,7 @@ class Register extends Component {
     render() {
         const { error } = this.props;
         const { email, username, password, passwordConfirm } = this.props.form.toJS();
-        const { handleChange } = this;
+        const { handleChange, handleLocalRegister } = this;
 
         return (
             <AuthContent title="회원가입">
