@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import queryString from 'query-string';
 import {
     AuthContent,
     InputWithLabel,
@@ -24,6 +25,15 @@ class Login extends Component {
             form: 'login',
         });
     };
+
+    componentDidMount() {
+        const { location } = this.props;
+        const query = queryString.parse(location.search);
+
+        if (query.expired !== undefined) {
+            this.setError('세션에 만료되었습니다. 다시 로그인하세요.');
+        }
+    }
 
     componentWillUnmount() {
         const { AuthActions } = this.props;
